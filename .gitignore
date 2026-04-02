@@ -1,0 +1,50 @@
+# MovieShine Monorepo Ignore Strategy
+
+# Dependency directories
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+client/.env
+server/.env
+
+# Build & Compilation Artifacts
+dist/
+dist-ssr/
+build/
+client/dist/
+server/dist/
+*.tsbuildinfo
+
+# OS Specific Files
+.DS_Store
+Thumbs.db
+
+# IDES & Editors
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logging
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+
+# Local configuration
+.vercel/
+.netlify/
