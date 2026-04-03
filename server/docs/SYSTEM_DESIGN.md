@@ -18,27 +18,26 @@ The system follows a modular monolithic architecture, containerized with Docker,
                      │      API Gateway / Server      │
                      │   (Express.js + TypeScript)    │
                      └───────────────┬────────────────┘
-                                     │
-         ┌───────────────────────────┼───────────────────────────┐
-         ▼                           ▼                           ▼
-┌──────────────────┐        ┌──────────────────┐        ┌──────────────────┐
-│   Catalog Svc    │        │   Booking Svc    │        │     User Svc     │
-│ - Movie Metadata │        │ - Seat Selection │        │ - Profile Auth   │
-│ - Show Schedule  │        │ - Payment Gate   │        │ - Favorites      │
-└────────┬─────────┘        └────────┬─────────┘        └────────┬─────────┘
-         │                           │                           │
-         │             ┌─────────────┴─────────────┐             │
-         ▼             ▼                           ▼             ▼
-┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐
-│     TMDB API     │  │     MongoDB      │  │     Inngest      │  │    Clerk Auth    │
-│ (Remote Data)    │  │ (Primary Store)  │  │ (Background Svc) │  │ (Identity Provider)│
-└──────────────────┘  └──────────────────┘  └──────────────────┘  └──────────────────┘
-                                     │
-                                     ▼
-                           ┌──────────────────┐
-                           │      Stripe       │
-                           │  (Payment Gate)   │
-                           └──────────────────┘
+                                      │
+          ┌──────────────┬────────────┴─────────────┬─────────────┐
+          ▼              ▼                          ▼             ▼
+ ┌────────────────┐ ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+ │  Catalog Svc   │ │  Booking Svc   │ │    User Svc    │ │  Chatbot Svc   │
+ │- Movie Metadata│ │- Seat Selection│ │- Profile Auth  │ │- GenAI Assist  │
+ │- Show Schedule │ │- Payment Gate  │ │- Favorites     │ │- Context Guard │
+ └───────┬────────┘ └───────┬────────┘ └───────┬────────┘ └───────┬────────┘
+         │                  │                  │                  │
+         ▼          ┌───────┴────────┐         ▼                  ▼
+┌────────────────┐ ┌────────────────┐ ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+│    TMDB API    │ │    MongoDB     │ │    Inngest     │ │   Clerk Auth   │ │   Gemini API   │
+│ (Remote Data)  │ │(Primary Store) │ │(Background Svc)│ │(Identity Prov) │ │ (AI Inference) │
+└────────────────┘ └────────────────┘ └────────────────┘ └────────────────┘ └────────────────┘
+                                    │
+                                    ▼
+                          ┌────────────────┐
+                          │     Stripe     │
+                          │ (Payment Gate) │
+                          └────────────────┘
 ```
 
 ## 📋 Component Inventory
@@ -60,6 +59,10 @@ The system follows a modular monolithic architecture, containerized with Docker,
 ### 🤖 4. Background Workers (Inngest)
 - **Responsibility**: Executes scheduled tasks such as show reminders (email) and automated expiration of unpaid bookings (releasing seats back to the catalog).
 
+### 💬 5. Chatbot Service (GenAI)
+- **Responsibility**: Provides a strict, project-specific AI assistant for movie recommendations and booking guidance.
+- **Engine**: Powered by Google Gemini with a custom persona layer.
+
 ## 🔌 Infrastructure Summary
 
 | Component | Technology | Role |
@@ -71,6 +74,7 @@ The system follows a modular monolithic architecture, containerized with Docker,
 | **MetaData** | TMDB API | Source of truth for global movie database |
 | **Email** | Nodemailer / Brevo | Transactional email delivery |
 | **Worker** | Inngest | Event-driven background job orchestration |
+| **Chatbot** | Gemini 1.5 Flash | AI-powered conversational assistance |
 
 ---
 

@@ -16,6 +16,7 @@ import ListBookings from "./pages/admin/ListBookings";
 import { useAppContext } from "./context/AppContext";
 import { SignIn } from "@clerk/clerk-react";
 import Loading from "./components/Loading";
+import ChatBot from "./components/ChatBot";
 import React from "react";
 
 const App: React.FC = () => {
@@ -55,6 +56,7 @@ const App: React.FC = () => {
           <Route path="list-bookings" element={<ListBookings />} />
         </Route>
       </Routes>
+      {!isAdminRoute && <ChatBot />}
       {!isAdminRoute && <Footer />}
     </>
   );

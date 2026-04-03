@@ -14,11 +14,10 @@ services:
     build: .
     container_name: quickshow-backend-only
     ports:
-      - "5000:5000"
+      - "3000:3000"
     env_file:
       - .env
     environment:
-      # Automatically connect the backend to the spawned mongo container
       - MONGODB_URI=mongodb://mongodb:27017/quickshow
     depends_on:
       - mongodb
