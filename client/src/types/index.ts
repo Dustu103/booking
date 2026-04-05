@@ -43,9 +43,17 @@ export interface IBookingPopulated extends Omit<IBooking, "show"> {
   show: IShow & { movie: IMovie };
 }
 
+export interface IAccessibility {
+  closedCaptions: boolean;
+  audioDescription: boolean;
+  wheelchairRows: string[];
+  companionSeatDiscount: boolean;
+}
+
 export interface ShowSlot {
   time: string | Date;
   showId: string;
+  accessibility?: IAccessibility;
 }
 
 export interface DateTimeMap {

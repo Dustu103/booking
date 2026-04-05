@@ -17,6 +17,9 @@ import { useAppContext } from "./context/AppContext";
 import { SignIn } from "@clerk/clerk-react";
 import Loading from "./components/Loading";
 import ChatBot from "./components/ChatBot";
+import Corporate from "./pages/Corporate";
+import CorporateDashboard from "./pages/CorporateDashboard";
+import GroupBooking from "./pages/GroupBooking";
 import React from "react";
 
 const App: React.FC = () => {
@@ -36,6 +39,9 @@ const App: React.FC = () => {
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/loading/:nextUrl" element={<Loading />} />
         <Route path="/favorite" element={<Favorite />} />
+        <Route path="/corporate" element={<Corporate />} />
+        <Route path="/corporate/dashboard" element={<CorporateDashboard />} />
+        <Route path="/group/:roomCode" element={<GroupBooking />} />
 
         {/* Admin Routes */}
         <Route

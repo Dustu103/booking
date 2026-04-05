@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import Title from "../../components/admin/Title";
-import { CheckIcon, Trash2Icon, StarIcon, PlusIcon, CalendarIcon, DollarSignIcon } from "lucide-react";
+import { CheckIcon, Trash2Icon, StarIcon, PlusIcon, CalendarIcon, DollarSignIcon, AccessibilityIcon } from "lucide-react";
 import { kConverter } from "../../lib/kConverter";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
@@ -29,6 +29,23 @@ const AddShows: React.FC = () => {
   const [dateTimeInput, setDateTimeInput] = useState<string>("");
   const [showPrice, setShowPrice] = useState<string>("");
   const [addingShow, setAddingShow] = useState<boolean>(false);
+  const [accessibility, setAccessibility] = useState({
+    closedCaptions: false,
+    audioDescription: false,
+    wheelchairRows: [] as string[],
+    companionSeatDiscount: false,
+  });
+
+  const ALL_ROWS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
+
+  const toggleWheelchairRow = (row: string) => {
+    setAccessibility((prev) => ({
+      ...prev,
+      wheelchairRows: prev.wheelchairRows.includes(row)
+        ? prev.wheelchairRows.filter((r) => r !== row)
+        : [...prev.wheelchairRows, row],
+    }));
+  };
 
   const fetchNowPlayingMovies = async () => {
     try {
@@ -88,6 +105,7 @@ const AddShows: React.FC = () => {
         movieId: selectedMovie,
         showsInput,
         showPrice: Number(showPrice),
+        accessibility,
       };
 
       const token = await getToken();
@@ -100,6 +118,7 @@ const AddShows: React.FC = () => {
         setSelectedMovie(null);
         setDateTimeSelection({});
         setShowPrice("");
+        setAccessibility({ closedCaptions: false, audioDescription: false, wheelchairRows: [], companionSeatDiscount: false });
       } else {
         toast.error(data.message);
       }
@@ -249,6 +268,80 @@ const AddShows: React.FC = () => {
                <p className="text-gray-500 font-bold uppercase tracking-widest text-xs">Waiting for slot definitions...</p>
              </div>
            )}
+        </div>
+      </div>
+
+      {/* Accessibility Section */}
+      <div className="mt-12 bg-white/5 border border-white/10 rounded-[40px] p-10 shadow-2xl backdrop-blur-xl">
+        <h3 className="text-white font-black text-lg uppercase tracking-tighter mb-8 flex items-center gap-2">
+          <AccessibilityIcon className="w-5 h-5 text-primary" />
+          4. Configure Accessibility
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Toggles */}
+          <div className="space-y-4">
+            {[
+              { key: "closedCaptions", label: "Closed Captions (CC)", desc: "Subtitles shown on cinema screen", color: "blue" },
+              { key: "audioDescription", label: "Audio Description (AD)", desc: "Narrated audio for visually impaired", color: "purple" },
+              { key: "companionSeatDiscount", label: "Companion Seat Discount", desc: "Free adjacent seat for carer", color: "yellow" },
+            ].map(({ key, label, desc, color }) => {
+              const isOn = accessibility[key as keyof typeof accessibility] as boolean;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setAccessibility((prev) => ({ ...prev, [key]: !isOn }))}
+                  className={`w-full flex items-center justify-between px-6 py-4 rounded-2xl border transition-all duration-300 text-left ${
+                    isOn
+                      ? `bg-${color}-500/10 border-${color}-500/40`
+                      : "bg-black/30 border-white/10 hover:border-white/20"
+                  }`}
+                >
+                  <div>
+                    <p className={`text-sm font-black uppercase tracking-wider ${isOn ? `text-${color}-300` : "text-gray-400"}`}>{label}</p>
+                    <p className="text-[10px] text-gray-600 font-bold mt-0.5">{desc}</p>
+                  </div>
+                  <div className={`w-10 h-6 rounded-full transition-all duration-300 flex items-center px-0.5 ${
+                    isOn ? "bg-primary justify-end" : "bg-white/10 justify-start"
+                  }`}>
+                    <div className={`w-5 h-5 rounded-full transition-all ${isOn ? "bg-black" : "bg-white/30"}`} />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Wheelchair Row Selector */}
+          <div>
+            <p className="text-white font-black text-sm uppercase tracking-wider mb-4 flex items-center gap-2">
+              <span className="text-green-400">♿</span> Wheelchair-Accessible Rows
+            </p>
+            <p className="text-gray-600 text-[10px] font-bold uppercase tracking-widest mb-4">Click rows to mark as level-access seating</p>
+            <div className="flex flex-wrap gap-2">
+              {ALL_ROWS.map((row) => {
+                const isSelected = accessibility.wheelchairRows.includes(row);
+                return (
+                  <button
+                    key={row}
+                    type="button"
+                    onClick={() => toggleWheelchairRow(row)}
+                    className={`w-12 h-12 rounded-xl font-black text-sm uppercase transition-all duration-300 border ${
+                      isSelected
+                        ? "bg-green-500/20 border-green-500/50 text-green-400 scale-110 shadow-lg shadow-green-500/20"
+                        : "bg-black/30 border-white/10 text-gray-500 hover:border-white/30"
+                    }`}
+                  >
+                    {row}
+                  </button>
+                );
+              })}
+            </div>
+            {accessibility.wheelchairRows.length > 0 && (
+              <p className="mt-4 text-green-500 text-xs font-black uppercase tracking-widest">
+                ✓ Rows {accessibility.wheelchairRows.sort().join(", ")} marked accessible
+              </p>
+            )}
+          </div>
         </div>
       </div>
 

@@ -10,6 +10,8 @@ import bookingRouter from "./routes/bookingRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import chatRouter from "./routes/chatRoutes.js";
+import corporateRouter from "./routes/corporateRoutes.js";
+import groupRouter from "./routes/groupRoutes.js";
 import { stripeWebhooks } from "./controllers/stripeWebhooks.js";
 
 const app = express();
@@ -37,6 +39,8 @@ app.use("/api/booking", bookingRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/user", userRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/corporate", corporateRouter);
+app.use("/api/group", groupRouter);
 
 app.listen(port, () =>
   console.log(`Server listening at http://localhost:${port}`)

@@ -22,12 +22,20 @@ export interface IMovie extends Document {
   runtime: number;
 }
 
+export interface IAccessibility {
+  closedCaptions: boolean;
+  audioDescription: boolean;
+  wheelchairRows: string[];
+  companionSeatDiscount: boolean;
+}
+
 export interface IShow extends Document {
   _id: Types.ObjectId;
   movie: string | IMovie;
   showDateTime: Date;
   showPrice: number;
   occupiedSeats: Record<string, any>;
+  accessibility: IAccessibility;
 }
 
 export interface IBooking extends Document {

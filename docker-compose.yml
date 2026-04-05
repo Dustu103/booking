@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # ─── Database ──────────────────────────────────────────────
+  mongodb:
+    image: mongo:latest
+    container_name: movieshine-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+  # ─── Redis (Centrifugo broker + room cache) ─────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: movieshine-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+
+  # ─── Centrifugo (Real-time WebSocket hub) ───────────────────
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    container_name: movieshine-centrifugo
+    volumes:
+      - ./centrifugo_config.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    restart: unless-stopped
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+
+  # ─── Backend API ───────────────────────────────────────────
+  server:
+    build: ./server
+    container_name: movieshine-server
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./server/.env
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - REDIS_URL=redis://redis:6379
+      - CENTRIFUGO_API_URL=http://centrifugo:8000
+      - CENTRIFUGO_API_KEY=centrifugo-api-key-change-in-production
+      - CENTRIFUGO_TOKEN_SECRET=centrifugo-secret-change-in-production
+    depends_on:
+      - mongodb
+      - redis
+      - centrifugo
+    restart: unless-stopped
+
+  # ─── Frontend (Vite + Nginx) ───────────────────────────────
+  client:
+    build:
+      context: ./client
+      args:
+        VITE_BASE_URL: http://localhost:3000
+        VITE_TMDB_IMAGE_BASE_URL: https://image.tmdb.org/t/p/original
+        VITE_CLERK_PUBLISHABLE_KEY: ${VITE_CLERK_PUBLISHABLE_KEY:-pk_test_cG9saXNoZWQtY2FsZi04Ni5jbGVyay5hY2NvdW50cy5kZXYk}
+        VITE_STRIPE_PUBLIC_KEY: ${VITE_STRIPE_PUBLIC_KEY:-pk_test_51THngEKZAh6ohvrEoK2Ct0RMymRcsbhfxsH5xD0d9VbjfEdQbheAt7SV3EVl3njS5d9Gn9cbnJZsGM8hl8iqSveP00IJpBRGjn}
+        VITE_CENTRIFUGO_URL: ${VITE_CENTRIFUGO_URL:-ws://localhost:8000/connection/websocket}
+    container_name: movieshine-client
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+      - centrifugo
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
+  redis_data:

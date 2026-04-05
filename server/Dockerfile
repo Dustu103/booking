@@ -2,6 +2,9 @@ FROM node:18-alpine
 
 WORKDIR /app
 
+# Copy .npmrc for legacy-peer-deps support
+COPY .npmrc* ./
+
 # Copy package files and install dependencies
 COPY package*.json ./
 RUN npm install

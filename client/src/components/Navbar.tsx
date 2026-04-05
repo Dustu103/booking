@@ -66,6 +66,16 @@ const Navbar: React.FC = () => {
         >
           Releases
         </Link>
+        <Link
+          onClick={() => {
+            window.scrollTo(0, 0);
+            setIsOpen(false);
+          }}
+          to="/corporate"
+          className="text-primary font-black"
+        >
+          Corporate
+        </Link>
         {favoriteMovies.length > 0 && (
           <Link
             onClick={() => {

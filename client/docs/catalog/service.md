@@ -10,7 +10,7 @@ The Catalog domain is the content discovery engine of MovieShine. It sources mov
 │                       HOME PAGE (/)                         │
 │  ┌──────────────────┐  ┌──────────────────┐  ┌──────────┐  │
 │  │  HeroSection     │  │ FeaturedSection   │  │ Trailers │  │
-│  │  (Backdrop+CTA)  │  │ (Horizontal Scroll)│  │ (Videos) │  │
+│  │  (Backdrop+CTA)  │  │(Horizontal Scroll)│  │ (Videos) │  │
 │  └──────────────────┘  └────────┬─────────┘  └──────────┘  │
 │                                 │                           │
 │                     ┌───────────▼──────────┐                │

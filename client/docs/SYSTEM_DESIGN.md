@@ -7,17 +7,17 @@ The MovieShine frontend is a **Single Page Application (SPA)** built with **Reac
 ### System Architecture Overview
 ```text
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                    MOVIESHINE CLIENT (Vite + React 19)                   │
+│                    MOVIESHINE CLIENT (Vite + React 19)                  │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
 │  ┌─────────────┐    ┌──────────────────┐    ┌──────────────────────┐    │
-│  │ ClerkProvider│◄──►│   AppContext      │◄──►│   Axios (baseURL)   │    │
-│  │ (Auth SDK)  │    │ (Global State)    │    │ → localhost:3000     │    │
+│  │ClerkProvider│◄──►│   AppContext     │◄──►│   Axios (baseURL)    │    │
+│  │ (Auth SDK)  │    │ (Global State)   │    │ → localhost:3000     │    │
 │  └──────┬──────┘    └────────┬─────────┘    └──────────┬───────────┘    │
 │         │                    │                          │               │
 │         ▼                    ▼                          ▼               │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
-│  │                    React Router DOM v7                           │    │
+│  │                    React Router DOM v7                          │    │
 │  │                                                                 │    │
 │  │  PUBLIC ROUTES                    ADMIN ROUTES (/admin/*)       │    │
 │  │  ┌────────────────────────┐      ┌──────────────────────────┐   │    │
@@ -44,7 +44,7 @@ The MovieShine frontend is a **Single Page Application (SPA)** built with **Reac
                                              ▼
                                   ┌──────────────────────┐
                                   │  Express.js Backend  │
-                                  │  (localhost:3000)     │
+                                  │  (localhost:3000)    │
                                   └──────────────────────┘
 ```
 

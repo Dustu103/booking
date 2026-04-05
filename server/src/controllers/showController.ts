@@ -30,7 +30,22 @@ interface ShowInputItem {
 // API to add a new show to the database
 export const addShow = async (req: Request, res: Response) => {
   try {
-    const { movieId, showsInput, showPrice }: { movieId: string; showsInput: ShowInputItem[]; showPrice: number } = req.body;
+    const {
+      movieId,
+      showsInput,
+      showPrice,
+      accessibility,
+    }: {
+      movieId: string;
+      showsInput: ShowInputItem[];
+      showPrice: number;
+      accessibility?: {
+        closedCaptions: boolean;
+        audioDescription: boolean;
+        wheelchairRows: string[];
+        companionSeatDiscount: boolean;
+      };
+    } = req.body;
 
     let movie = (await Movie.findById(movieId)) as IMovie | null;
 
@@ -77,7 +92,13 @@ export const addShow = async (req: Request, res: Response) => {
           movie: movieId,
           showDateTime: new Date(dateTimeString),
           showPrice,
-          occupiedSeats: {}, // Initialize with empty object
+          occupiedSeats: {},
+          accessibility: accessibility ?? {
+            closedCaptions: false,
+            audioDescription: false,
+            wheelchairRows: [],
+            companionSeatDiscount: false,
+          },
         });
       });
     });
@@ -121,7 +142,7 @@ export const getShow = async (req: Request, res: Response) => {
     })) as IShow[];
 
     const movie = await Movie.findById(movieId);
-    const dateTime: Record<string, { time: Date; showId: string | any }[]> = {};
+    const dateTime: Record<string, { time: Date; showId: string | any; accessibility?: any }[]> = {};
 
     shows.forEach((show) => {
       const date = show.showDateTime.toISOString().split("T")[0];
@@ -129,7 +150,11 @@ export const getShow = async (req: Request, res: Response) => {
         dateTime[date] = [];
       }
 
-      dateTime[date].push({ time: show.showDateTime, showId: show._id });
+      dateTime[date].push({
+        time: show.showDateTime,
+        showId: show._id,
+        accessibility: show.accessibility,
+      });
     });
 
     res.json({ success: true, movie, dateTime });
