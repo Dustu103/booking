@@ -20,13 +20,13 @@ The Booking domain is the transactional core of the MovieShine frontend. It mana
 │  │  Row Labels (A-J) ←→ 12 Seat Buttons per row                 │   │
 │  │                                                               │   │
 │  │  Seat States:                                                 │   │
-│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐                      │   │
-│  │  │Available │  │Selected │  │Occupied │                      │   │
-│  │  │ (White)  │  │(Primary)│  │ (Gray)  │                      │   │
-│  │  │ border-  │  │ shadow- │  │ cursor- │                      │   │
-│  │  │ white/20 │  │ primary │  │ not-    │                      │   │
-│  │  │          │  │ /40     │  │ allowed │                      │   │
-│  │  └─────────┘  └─────────┘  └─────────┘                      │   │
+│  │  ┌─────────┐  ┌─────────┐  ┌─────────┐  ┌─────────┐      │   │
+│  │  │Available │  │Selected │  │Occupied │  │Accessb. │      │   │
+│  │  │ (White)  │  │(Primary)│  │ (Gray)  │  │ (Green) │      │   │
+│  │  │ border-  │  │ shadow- │  │ cursor- │  │ highlight│     │   │
+│  │  │ white/20 │  │ primary │  │ not-    │  │ borders │      │   │
+│  │  │          │  │ /40     │  │ allowed │  │         │      │   │
+│  │  └─────────┘  └─────────┘  └─────────┘  └─────────┘      │   │
 │  └──────────────────────────────────────────────────────────────┘   │
 │                              │                                      │
 │  ┌──────────────────────────────────────────────────────────────┐   │
@@ -141,7 +141,8 @@ src/
 │   └── MyBookings.tsx     # User's booking history with populated data
 │
 ├── components/
-│   └── DateSelect.tsx     # Date/time picker (bridges catalog → booking)
+│   ├── DateSelect.tsx     # Date/time picker (bridges catalog → booking)
+│   └── AccessibilityBadge.tsx # UI component highlighting available accessibilities
 │
 ├── types/
 │   └── index.ts           # IBooking, IBookingPopulated, IShow, ShowSlot
@@ -152,6 +153,7 @@ src/
 
 ## ✅ Implementation Status
 - **✅ Seat Grid**: 10×12 interactive layout with 3-state rendering
+- **✅ Accessibility**: Highlight accessible rows in visual seat grid matching data points.
 - **✅ Atomic Selection**: Max 5 seats validation enforced client-side
 - **✅ Stripe Checkout**: Full redirect flow with session URL
 - **✅ Booking History**: Deep-populated data with poster images
