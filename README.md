@@ -4,12 +4,12 @@
 ## 0. Project Overview
 MovieShine is a high-performance, atomic seat-booking ecosystem built with **Vite + React + Express + TypeScript**. This platform facilitates seamless transitions between movie discovery, real-time seat allocation, and secure Stripe-integrated transactions.
 
-## 1. Architectural Highlights (ProYodha Standard)
+## 1. Architectural Highlights
 The platform follows a strict service-oriented architecture, ensuring clear separation of concerns across the full-stack:
 
-- **Nexus-B (Booking Service)**: Handles real-time seat maps and transaction lifecycles.
-- **Show-C (Catalog Service)**: Manages movie metadata and localized scheduling.
-- **Aegis-U (User Service)**: Unified identity management powered by Clerk.
+- **Booking Service**: Handles real-time seat maps and transaction lifecycles.
+- **Catalog Service**: Manages movie metadata and localized scheduling.
+- **Identity Service**: Unified identity management powered by Clerk.
 
 ## 2. Technology Stack
 - **Frontend**: React 18, Vite, TypeScript, TailwindCSS.
